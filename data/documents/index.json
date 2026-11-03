@@ -1,0 +1,182 @@
+[
+  {
+    "id": "tcs-ar-fy2026-performance-trend",
+    "ticker": "TCS",
+    "document_type": "annual_report",
+    "period": "FY2024–FY2026",
+    "title": "TCS Integrated Annual Report 2025–26 — Performance Trend excerpts",
+    "source_url": "https://www.tcs.com/content/dam/tcs/investor-relations/financial-statements/2025-26/ar/annual-report-2025-2026.pdf",
+    "source_name": "Tata Consultancy Services official annual report",
+    "indexed_at": "2026-10-28",
+    "seeded_reference_excerpt": true,
+    "source_scope": "Consolidated / performance trend table; consult the report footnote for adjustments",
+    "structured_facts": [
+      {
+        "metric": "Revenue from operations",
+        "unit": "₹ crore",
+        "periods": [
+          {
+            "period": "FY2024",
+            "value": 240893
+          },
+          {
+            "period": "FY2025",
+            "value": 255324
+          },
+          {
+            "period": "FY2026",
+            "value": 267021
+          }
+        ]
+      },
+      {
+        "metric": "EBIT",
+        "unit": "₹ crore",
+        "periods": [
+          {
+            "period": "FY2024",
+            "value": 59311
+          },
+          {
+            "period": "FY2025",
+            "value": 62165
+          },
+          {
+            "period": "FY2026",
+            "value": 66838
+          }
+        ]
+      },
+      {
+        "metric": "Profit before tax",
+        "unit": "₹ crore",
+        "periods": [
+          {
+            "period": "FY2024",
+            "value": 63038
+          },
+          {
+            "period": "FY2025",
+            "value": 65331
+          },
+          {
+            "period": "FY2026",
+            "value": 70355
+          }
+        ]
+      },
+      {
+        "metric": "Profit after tax",
+        "unit": "₹ crore",
+        "periods": [
+          {
+            "period": "FY2024",
+            "value": 46585
+          },
+          {
+            "period": "FY2025",
+            "value": 48553
+          },
+          {
+            "period": "FY2026",
+            "value": 52820
+          }
+        ]
+      },
+      {
+        "metric": "Employee cost",
+        "unit": "₹ crore",
+        "periods": [
+          {
+            "period": "FY2024",
+            "value": 140131
+          },
+          {
+            "period": "FY2025",
+            "value": 145788
+          },
+          {
+            "period": "FY2026",
+            "value": 154994
+          }
+        ]
+      },
+      {
+        "metric": "Other operating cost",
+        "unit": "₹ crore",
+        "periods": [
+          {
+            "period": "FY2024",
+            "value": 41451
+          },
+          {
+            "period": "FY2025",
+            "value": 47371
+          },
+          {
+            "period": "FY2026",
+            "value": 45189
+          }
+        ]
+      },
+      {
+        "metric": "Net worth",
+        "unit": "₹ crore",
+        "periods": [
+          {
+            "period": "FY2024",
+            "value": 90489
+          },
+          {
+            "period": "FY2025",
+            "value": 94756
+          },
+          {
+            "period": "FY2026",
+            "value": 107240
+          }
+        ]
+      },
+      {
+        "metric": "Employee headcount",
+        "unit": "people",
+        "periods": [
+          {
+            "period": "FY2024",
+            "value": 601546
+          },
+          {
+            "period": "FY2025",
+            "value": 607979
+          },
+          {
+            "period": "FY2026",
+            "value": 584519
+          }
+        ]
+      }
+    ],
+    "chunks": [
+      {
+        "page": null,
+        "section": "Performance Trend – 10 years",
+        "text": "TCS Integrated Annual Report 2025–26, Performance Trend – 10 years. The annual report presents its company performance trend table in ₹ crore. Revenue from operations: FY2026 267,021; FY2025 255,324; FY2024 240,893. EBIT: FY2026 66,838; FY2025 62,165; FY2024 59,311. Profit before tax: FY2026 70,355; FY2025 65,331; FY2024 63,038. Profit after tax: FY2026 52,820; FY2025 48,553; FY2024 46,585. These are annual figures from the performance trend table and should be checked against the linked report before making decisions. The same performance-trend table also lists employee headcount as 584,519 in FY2026, 607,979 in FY2025 and 601,546 in FY2024; the table alone does not explain the year-to-year change."
+      },
+      {
+        "page": null,
+        "section": "Operating costs and financial position trend",
+        "text": "TCS Integrated Annual Report 2025–26, performance trend table. Employee cost in ₹ crore: FY2026 154,994; FY2025 145,788; FY2024 140,131. Other operating cost: FY2026 45,189; FY2025 47,371; FY2024 41,451. Total operating cost: FY2026 200,183; FY2025 193,159; FY2024 181,582. Net worth: FY2026 107,240; FY2025 94,756; FY2024 90,489. Headcount: FY2026 584,519; FY2025 607,979; FY2024 601,546. These values are transcribed from the annual report performance trend table; validate in the source report."
+      },
+      {
+        "page": null,
+        "section": "Geographical revenue mix",
+        "text": "TCS Integrated Annual Report 2025–26, geographic-segment revenue in ₹ crore. Americas: FY2026 134,998; FY2025 127,870; FY2024 127,939. United Kingdom: FY2026 46,444; FY2025 42,977; FY2024 39,852. Continental Europe: FY2026 41,023; FY2025 36,510; FY2024 35,772. India: FY2026 15,775; FY2025 22,060; FY2024 13,562. Others: FY2026 28,781; FY2025 25,907; FY2024 23,768. This source excerpt lists geographic-segment revenue; segment mix changes should be interpreted with the full report context."
+      },
+      {
+        "page": null,
+        "section": "Performance trend footnote",
+        "text": "The report's performance trend table carries a footnote stating that selected values exclude specified items for some years, including a legal-claim settlement in FY2024 and exceptional items in FY2026. The full report and relevant financial statement notes should be consulted before comparing adjusted performance trend values with reported statutory statements. The precise exclusions and reconciliations should be checked directly in the linked source."
+      }
+    ]
+  }
+]

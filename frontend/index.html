@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#101311" />
+  <meta name="description" content="FINN — evidence-first investment intelligence for Indian public markets." />
+  <title>FINN — Investment Intelligence</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <a class="brand" href="#briefing" aria-label="FINN home">
+        <span class="brand-mark"><span></span><span></span><span></span></span>
+        <span class="brand-word">finn<span class="brand-period">.</span></span>
+      </a>
+      <div class="workspace-label">INVESTMENT DESK</div>
+      <nav class="primary-nav">
+        <button class="nav-item active" data-view="briefing"><span class="nav-icon">◈</span><span>Briefing</span><span class="nav-count" id="nav-feed-count">—</span></button>
+        <button class="nav-item" data-view="research"><span class="nav-icon">⌕</span><span>Research</span></button>
+        <button class="nav-item" data-view="watchlist"><span class="nav-icon">◎</span><span>Watchlist</span></button>
+      </nav>
+      <div class="sidebar-section-head"><span>YOUR PORTFOLIO</span><button class="tiny-icon" id="refresh-portfolio" aria-label="Refresh portfolio">↻</button></div>
+      <div class="mini-portfolio" id="mini-portfolio">
+        <div class="portfolio-loading"></div><div class="portfolio-loading short"></div><div class="portfolio-loading"></div>
+      </div>
+      <button class="text-action add-company" data-view="watchlist"><span>＋</span> Manage watchlist</button>
+      <div class="sidebar-bottom">
+        <div class="data-status"><span class="status-dot" id="connection-dot"></span><div><strong id="connection-label">Connecting sources</strong><small id="connection-caption">Checking availability</small></div></div>
+        <div class="sidebar-footer"><span>FINN LABS</span><span>v0.1 prototype</span></div>
+      </div>
+    </aside>
+
+    <div class="main-column">
+      <header class="topbar">
+        <div class="mobile-brand"><span class="brand-mark"><span></span><span></span><span></span></span><span class="brand-word">finn<span class="brand-period">.</span></span></div>
+        <div class="breadcrumb"><span>Investment desk</span><span class="crumb-sep">/</span><strong id="breadcrumb-current">Briefing</strong></div>
+        <div class="topbar-actions"><span class="market-pill"><span class="status-dot"></span><span>END-OF-DAY</span></span><button class="avatar-button" id="help-button" title="About FINN">?</button></div>
+      </header>
+
+      <main class="main-content">
+        <section class="view active" id="view-briefing" aria-labelledby="briefing-title">
+          <div class="page-heading briefing-heading">
+            <div><div class="eyebrow"><span class="eyebrow-line"></span> WEDNESDAY DESK NOTE</div><h1 id="briefing-title">Your market,<br /><em>filtered.</em></h1><p class="page-intro">The few things worth your attention. Ranked by materiality, not volume.</p></div>
+            <div class="heading-meta"><div class="date-large" id="current-date">28 OCT 2026</div><div class="updated-meta"><span class="pulse-dot"></span><span id="last-updated">Updated just now</span></div></div>
+          </div>
+          <div class="demo-banner" id="demo-banner"><span class="demo-banner-icon">i</span><div><strong>Illustrative mode</strong><span>Sample alert scenarios are shown until a live source responds. Sample records are not actual filings or market events.</span></div><button id="dismiss-banner" aria-label="Dismiss notice">×</button></div>
+          <div class="stat-row" id="stat-row">
+            <div class="stat-card"><div class="stat-label">SIGNALS TODAY <span class="stat-glyph">↗</span></div><div class="stat-value" id="stat-signals">—</div><div class="stat-sub" id="stat-signals-sub">across your portfolio</div></div>
+            <div class="stat-card"><div class="stat-label">NEED ATTENTION <span class="attention-indicator"></span></div><div class="stat-value" id="stat-attention">—</div><div class="stat-sub">high-priority signals</div></div>
+            <div class="stat-card"><div class="stat-label">COMPANIES TRACKED <span class="stat-glyph">◎</span></div><div class="stat-value">18</div><div class="stat-sub">across 11 sectors</div></div>
+            <div class="stat-card source-stat"><div class="stat-label">SOURCE HEALTH <span class="stat-glyph">⌁</span></div><div class="stat-value stat-value-small" id="stat-source">Checking</div><div class="stat-sub" id="stat-source-sub">prices & filings</div></div>
+          </div>
+
+          <div class="content-grid">
+            <div class="feed-column">
+              <div class="section-header feed-section-header">
+                <div><div class="section-kicker">THE SIGNAL FEED</div><h2>What matters</h2></div>
+                <div class="filter-controls"><div class="segmented" role="group" aria-label="Feed time window"><button class="segment active" data-days="1">24H</button><button class="segment" data-days="7">7D</button><button class="segment" data-days="30">30D</button></div><button class="icon-button" id="refresh-feed" aria-label="Refresh feed" title="Refresh feed">↻</button></div>
+              </div>
+              <div class="feed-filters"><div class="search-box feed-search"><span>⌕</span><input id="feed-search" type="search" placeholder="Filter company or keyword" aria-label="Filter feed" /></div><select id="priority-filter" aria-label="Filter by priority"><option value="all">All priorities</option><option value="High">High priority</option><option value="Medium">Medium priority</option><option value="Routine">Routine</option></select><select id="category-filter" aria-label="Filter by category"><option value="all">All categories</option></select></div>
+              <div class="feed-meta"><span id="feed-result-count">Loading signals…</span><span class="sort-note"><span class="sort-icon">↕</span> Prioritized by materiality</span></div>
+              <div id="feed-list" class="feed-list" aria-live="polite"><div class="feed-skeleton"></div><div class="feed-skeleton"></div><div class="feed-skeleton"></div></div>
+              <div id="feed-empty" class="empty-state hidden"><div class="empty-icon">◌</div><h3>Nothing material in this window</h3><p>Try a longer time range or clear your filters. Routine filings remain available when they arrive.</p><button class="secondary-button" id="clear-filters">Clear filters</button></div>
+              <div class="feed-footnote"><span class="footnote-dot"></span> Priority is a triage cue, not a prediction of share-price direction.</div>
+            </div>
+            <aside class="right-rail">
+              <div class="rail-card rail-featured"><div class="rail-title-row"><span class="rail-kicker">THE FINN METHOD</span><span class="spark-mark">✳</span></div><h3>Less noise.<br /><em>More context.</em></h3><p>Every signal has a reason. Every research claim should have a source.</p><button class="rail-link" data-view="research">Explore company research <span>↗</span></button></div>
+              <div class="rail-card monitor-card"><div class="rail-title-row"><div><div class="rail-kicker">THRESHOLD WATCH</div><h3>Signal monitor</h3></div><button class="tiny-icon" data-view="watchlist" aria-label="Edit alert settings">↗</button></div><div class="threshold-row"><div class="threshold-icon">±</div><div><strong id="price-threshold-label">±3.0% daily move</strong><small>Price trigger</small></div><span class="threshold-state">ON</span></div><div class="threshold-row"><div class="threshold-icon volume-icon">⌁</div><div><strong id="volume-threshold-label">2.0× average volume</strong><small>20-session baseline</small></div><span class="threshold-state">ON</span></div><button class="wide-subtle-button" data-view="watchlist">Configure thresholds <span>→</span></button></div>
+              <div class="rail-card sector-card"><div class="rail-title-row"><div><div class="rail-kicker">COVERAGE MIX</div><h3>Across the market</h3></div><span class="muted-mini">18 names</span></div><div id="sector-mix" class="sector-mix"></div></div>
+              <div class="rail-note"><span class="note-lock">⌑</span><p>Research is grounded in annual reports, results filings and earnings-call transcripts — not broker commentary.</p></div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="view-research" aria-labelledby="research-title">
+          <div class="page-heading research-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> PRIMARY-SOURCE ANALYSIS</div><h1 id="research-title">Go beyond<br /><em>the headline.</em></h1><p class="page-intro">Investigate a company using what management reported, said and delivered.</p></div><div class="research-orbit" aria-hidden="true"><span class="orbit-ring ring-one"></span><span class="orbit-ring ring-two"></span><span class="orbit-core">F<span>.</span></span><span class="orbit-node node-one"></span><span class="orbit-node node-two"></span></div></div>
+          <div class="research-search-panel">
+            <div class="research-search-top"><div><div class="section-kicker">START AN INVESTIGATION</div><h2>What do you want to understand?</h2></div><span class="source-only-tag"><span>⌑</span> Primary sources only</span></div>
+            <form id="research-form">
+              <div class="research-input-row"><div class="ticker-picker"><label for="research-ticker">COMPANY / NSE TICKER</label><input id="research-ticker" list="ticker-options" value="TCS" autocomplete="off" placeholder="e.g. TCS" required maxlength="24" /><datalist id="ticker-options"></datalist></div><div class="question-picker"><label for="research-question">YOUR QUESTION</label><input id="research-question" value="What should I know about this company's financial trajectory and key risks?" placeholder="Ask a focused research question…" required maxlength="1200" /></div><button class="run-research-button" type="submit"><span class="run-button-label">Analyze</span><span class="run-button-icon">↗</span></button></div>
+              <div class="prompt-chips"><span class="prompt-chips-label">TRY</span><button type="button" class="prompt-chip" data-question="What has driven revenue and operating margin over the available periods?">Revenue & margins</button><button type="button" class="prompt-chip" data-question="Does reported profit convert into operating cash flow?">Cash quality</button><button type="button" class="prompt-chip" data-question="What did management guide for, and what happened afterward?">Guidance vs delivery</button><button type="button" class="prompt-chip" data-question="Build the strongest evidence-backed bull and bear cases.">Bull vs. bear</button></div>
+            </form>
+          </div>
+          <div id="research-status-panel" class="research-status-panel"><div class="research-status-symbol">⌕</div><div><span class="section-kicker">YOUR RESEARCH DESK</span><h3>Follow the evidence.</h3><p>Choose a company and ask a question. FINN will search its indexed primary documents, surface the relevant passages and show where evidence is missing.</p><div class="research-promise-row"><span><i class="promise-check">✓</i> Traceable source links</span><span><i class="promise-check">✓</i> Missing data called out</span><span><i class="promise-check">✓</i> No invented metrics</span></div></div></div>
+          <div id="research-results" class="research-results hidden" aria-live="polite"></div>
+          <div class="research-method"><div class="method-number">01</div><div><strong>Retrieve</strong><span>Find relevant passages in company documents.</span></div><div class="method-rule"></div><div class="method-number">02</div><div><strong>Compare</strong><span>Match periods, figures and management statements.</span></div><div class="method-rule"></div><div class="method-number">03</div><div><strong>Cite</strong><span>Connect each conclusion to its source.</span></div></div>
+        </section>
+
+        <section class="view" id="view-watchlist" aria-labelledby="watchlist-title">
+          <div class="page-heading watchlist-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> PORTFOLIO CONTROL</div><h1>Know what<br /><em>you're watching.</em></h1><p class="page-intro">Your 18-company demo portfolio and the rules FINN uses to flag unusual activity.</p></div><div class="watchlist-count"><strong>18</strong><span>COMPANIES</span></div></div>
+          <div class="watchlist-layout"><div class="watchlist-main"><div class="section-header"><div><div class="section-kicker">THE WATCHLIST</div><h2>Companies tracked</h2></div><div class="search-box watchlist-search"><span>⌕</span><input id="watchlist-search" type="search" placeholder="Find a company" aria-label="Find a company" /></div></div><div class="company-grid" id="company-grid"><div class="company-skeleton"></div><div class="company-skeleton"></div><div class="company-skeleton"></div></div></div>
+            <aside class="settings-panel"><div class="section-kicker">YOUR RULES</div><h2>Threshold watch</h2><p class="settings-intro">Set what unusual means to you. Triggers use daily closing data, not intraday prices.</p><form id="alert-settings-form"><div class="setting-block"><div class="setting-label-row"><label for="price-range">Daily price move</label><output id="price-range-value">±3.0%</output></div><input id="price-range" type="range" min="0.5" max="10" step="0.5" value="3" /><div class="range-endpoints"><span>±0.5%</span><span>±10%</span></div><div class="setting-helper">Alert when the absolute daily change reaches this level.</div></div><div class="setting-block"><div class="setting-label-row"><label for="volume-range">Volume vs. average</label><output id="volume-range-value">2.0×</output></div><input id="volume-range" type="range" min="1" max="5" step="0.25" value="2" /><div class="range-endpoints"><span>1×</span><span>5×</span></div><div class="setting-helper">Compare today's volume with the previous 20 sessions.</div></div><div class="setting-block"><div class="setting-label-row"><label for="window-select">Announcement window</label></div><select id="window-select" class="settings-select"><option value="1">Last 24 hours</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option></select></div><div class="setting-block category-settings"><div class="setting-label-row"><label>Prioritize categories</label><span class="setting-small">PUSH FEED</span></div><label class="check-row"><input type="checkbox" name="alert-category" value="results" checked /><span>Results & earnings</span></label><label class="check-row"><input type="checkbox" name="alert-category" value="M&A" checked /><span>M&A / corporate action</span></label><label class="check-row"><input type="checkbox" name="alert-category" value="management_change" checked /><span>Leadership changes</span></label><label class="check-row"><input type="checkbox" name="alert-category" value="litigation" checked /><span>Litigation & regulation</span></label><label class="check-row"><input type="checkbox" name="alert-category" value="fund_raise" checked /><span>Fund raising / debt</span></label></div><button class="save-settings-button" type="submit">Save alert rules <span>→</span></button><div class="settings-saved hidden" id="settings-saved"><span>✓</span> Rules saved to this prototype</div><button class="test-alert-button" type="button" id="test-alerts">Preview current triggers ↗</button><div id="alert-preview" class="alert-preview hidden"></div></form></aside>
+          </div>
+        </section>
+
+        <footer class="app-footer"><span>FINN <span class="footer-dot">·</span> Investment intelligence, not investment advice.</span><span>Data provenance matters. <a href="https://www.nseindia.com/companies-listing/corporate-filings-announcements" target="_blank" rel="noopener">NSE filings</a> <span class="footer-dot">·</span> <a href="https://finance.yahoo.com/" target="_blank" rel="noopener">Yahoo Finance</a></span></footer>
+      </main>
+    </div>
+
+    <nav class="mobile-nav" aria-label="Mobile navigation"><button class="mobile-nav-item active" data-view="briefing"><span>◈</span><small>Briefing</small></button><button class="mobile-nav-item" data-view="research"><span>⌕</span><small>Research</small></button><button class="mobile-nav-item" data-view="watchlist"><span>◎</span><small>Watchlist</small></button></nav>
+  </div>
+
+  <div class="modal-backdrop hidden" id="detail-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="detail-modal"><button class="modal-close" id="modal-close" aria-label="Close details">×</button><div id="modal-content"></div></div></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
