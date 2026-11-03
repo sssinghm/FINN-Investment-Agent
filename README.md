@@ -14,7 +14,7 @@ This repository is designed to be honest about source availability:
 - Prices: best-effort public Yahoo Finance chart endpoint (`/v8/finance/chart/{symbol}`). If a request fails, the app displays an **illustrative synthetic price series** with a visible note.
 - Announcements: best-effort public NSE corporate-announcements endpoint. If a request fails or access is denied, the app displays **synthetic scenarios marked DEMO**. These are not statements about the named companies and are not actual filings.
 - Research: the repository includes one **curated excerpt pack** from TCS’s official FY2025–26 annual-report performance-trend table so the research workflow works on first launch. It is not a full annual report or a complete financial-statement extraction. Other tickers return a **coverage gap** until source documents are indexed. FINN will not fill missing facts from outside model knowledge.
-- LLM: optional. Without `OPENAI_API_KEY`, research runs in retrieval-only mode; this is intentional and does not block the app from starting.
+- LLM: optional. Without `GEMINI_API_KEY`, research runs in retrieval-only mode; this is intentional and does not block the app from starting.
 
 The upstream public web endpoints are not guaranteed APIs. Respect each source's terms, rate limits and access controls. If access is denied, the app falls back rather than attempting to bypass a block or CAPTCHA.
 
@@ -93,17 +93,22 @@ The script extracts PDF text (using page metadata when available) or readable HT
 
 After ingestion, restart the app if it is already running (or re-run the research request); no database migration is needed.
 
-## Optional LLM synthesis
+## Optional Gemini synthesis
 
-Without a key, FINN returns retrieved excerpts with a retrieval-only explanation. To allow the app to synthesize those passages, set these values in `.env`:
+FINN can use Google's Gemini API to synthesize the primary-source passages it has already retrieved. The app does not send a question to Gemini when the selected company has no indexed primary-source document; it returns a coverage gap instead.
+
+1. Create a Gemini API key in [Google AI Studio](https://aistudio.google.com/api-keys).
+2. Copy `.env.example` to `.env` and set the following values:
 
 ```env
-OPENAI_API_KEY=your_key_here
-OPENAI_MODEL=gpt-4.1-mini
-OPENAI_BASE_URL=https://api.openai.com/v1
+GEMINI_API_KEY=your_gemini_key_here
+GEMINI_MODEL=gemini-3.6-flash
+GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
 ```
 
-The model is prompted to answer only from retrieved passages, cite source markers and acknowledge insufficient evidence. This is a prototype guardrail, not a guarantee; verify the source text and period for any material claim. Never commit `.env` or API keys.
+3. Restart the local application. On Render, add the same three variables under **Environment** and redeploy.
+
+The integration uses Google's OpenAI-compatible Chat Completions endpoint. The model is instructed to answer only from retrieved passages, cite source markers and acknowledge insufficient evidence. This is a prototype guardrail, not a guarantee; verify the source text, period and citations for material claims. The API free tier has model- and project-specific rate limits, and Google states that free-tier content may be used to improve its products. Send only public information that you are comfortable sharing with Google; do not submit confidential, personal or material non-public information. Never commit `.env` or API keys. See Google's [OpenAI compatibility guide](https://ai.google.dev/gemini-api/docs/openai), [rate limits](https://aistudio.google.com/docs/rate-limits) and [pricing](https://aistudio.google.com/docs/pricing) for current terms.
 
 ## Alert rules
 

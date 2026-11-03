@@ -7,7 +7,9 @@ services:
     envVars:
       - key: FINN_OFFLINE_MODE
         value: "0"
-      - key: OPENAI_API_KEY
+      - key: GEMINI_API_KEY
         sync: false
-      - key: OPENAI_MODEL
-        value: gpt-4.1-mini
+      - key: GEMINI_MODEL
+        value: gemini-3.6-flash
+      - key: GEMINI_BASE_URL
+        value: https://generativelanguage.googleapis.com/v1beta/openai
