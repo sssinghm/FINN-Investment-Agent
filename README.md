@@ -1,143 +1,235 @@
 # FINN — Financial Investment Agent
 
-A mobile-first prototype for the ENAM AI Engineer Build Challenge. FINN is organized around two workflows:
+**A mobile-first financial investment intelligence prototype built for the ENAM AI Engineer Build Challenge.**
 
-- **Push:** a prioritized corporate-announcement feed plus configurable end-of-day price and volume triggers.
-- **Pull:** company research that retrieves passages from indexed primary documents and shows evidence/source links. If no company documents are indexed, it reports a coverage gap rather than inventing financial facts.
+**Live application:** https://finn-investment-agent-ssjv.onrender.com
+**GitHub repository:** https://github.com/sssinghm/FINN-Investment-Agent
 
-The project is intentionally small and runs as one FastAPI application serving a static responsive frontend. It does not require a JavaScript build step.
+## 1. Overview
 
-## Prototype integrity / source status
+FINN is a mobile-first investment intelligence agent designed around two complementary workflows:
 
-This repository is designed to be honest about source availability:
+- **Push — Proactive intelligence:** Prioritized corporate-announcement briefings and configurable end-of-day price and volume alerts.
+- **Pull — On-demand research:** Company research using retrieved passages from indexed primary-source financial documents, with Gemini-powered synthesis and source references.
 
-- Prices: best-effort public Yahoo Finance chart endpoint (`/v8/finance/chart/{symbol}`). If a request fails, the app displays an **illustrative synthetic price series** with a visible note.
-- Announcements: best-effort public NSE corporate-announcements endpoint. If a request fails or access is denied, the app displays **synthetic scenarios marked DEMO**. These are not statements about the named companies and are not actual filings.
-- Research: the repository includes one **curated excerpt pack** from TCS’s official FY2025–26 annual-report performance-trend table so the research workflow works on first launch. It is not a full annual report or a complete financial-statement extraction. Other tickers return a **coverage gap** until source documents are indexed. FINN will not fill missing facts from outside model knowledge.
-- LLM: optional. Without `GEMINI_API_KEY`, research runs in retrieval-only mode; this is intentional and does not block the app from starting.
+The central product idea is to help investors filter information, identify what deserves attention, and investigate important developments without navigating multiple disconnected sources.
 
-The upstream public web endpoints are not guaranteed APIs. Respect each source's terms, rate limits and access controls. If access is denied, the app falls back rather than attempting to bypass a block or CAPTCHA.
+## 2. Core Features
 
-## Interface previews
+### Push — Briefing and alerts
 
-The `screenshots/` folder contains representative captures of the briefing on desktop and mobile, plus the TCS research view. Demo-mode records in the briefing are deliberately marked as illustrative; the research view uses the curated annual-report excerpt documented below.
+- Prioritized corporate-announcement feed.
+- Configurable price-movement thresholds.
+- Unusual-volume detection against recent trading history.
+- Source context and links for individual signals.
+- Company-level navigation from signals to deeper research.
 
-![FINN desktop briefing](screenshots/briefing-desktop.png)
+Default demonstration thresholds:
+- Daily price movement: ±3%.
+- Unusual volume: 2× the previous 20-session average.
+- Announcement window: 24 hours.
 
-![FINN mobile briefing](screenshots/briefing-mobile.png)
+Alert calculations use end-of-day data, not intraday monitoring.
 
-![FINN TCS research](screenshots/research-tcs.png)
+### Pull — Financial research
 
-## Requirements
+- On-demand company research.
+- Retrieval from indexed primary-source documents.
+- Source-linked findings and evidence excerpts.
+- Gemini-powered research synthesis.
+- Explicit coverage-gap handling when evidence is unavailable.
+- Research history and company coverage information.
 
-- Python 3.10+
-- Internet connection only if you want to try the live-source adapters or download documents. The application and labeled demo mode can run offline.
+Currently indexed research coverage:
+- TCS
+- Infosys (INFY)
+- Reliance Industries (RELIANCE)
+- HDFC Bank (HDFCBANK)
 
-## Run locally
+The document collection includes FY2025–26 annual-report material. Indexed excerpts are not equivalent to complete financial-statement extraction.
 
-```bash
-cd finn-prototype
-python -m venv .venv
+## 3. Technology Stack
 
-# Windows PowerShell
-.\.venv\Scripts\Activate.ps1
+| Component | Technology |
+|---|---|
+| Backend | Python, FastAPI |
+| Frontend | Responsive HTML, CSS and JavaScript |
+| Research retrieval | Primary-source document indexing and retrieval |
+| LLM synthesis | Google Gemini API |
+| Model | gemini-3.6-flash |
+| API integration | Gemini OpenAI-compatible endpoint |
+| Document extraction | PDF/HTML ingestion |
+| Local application data | Lightweight local storage |
+| Testing | Pytest |
+| Deployment | Render |
+| Source control | Git and GitHub |
 
-# macOS / Linux
-source .venv/bin/activate
+## 4. Architecture
 
-pip install -r requirements.txt
-cp .env.example .env      # Windows: Copy-Item .env.example .env
-uvicorn backend.app:app --host 127.0.0.1 --port 8000 --reload
+FINN follows a lightweight application architecture:
+
+1. Public data adapters retrieve end-of-day prices and corporate announcements.
+2. The backend classifies, prioritizes and prepares briefing signals.
+3. The document-ingestion pipeline extracts text from primary-source PDFs and HTML documents.
+4. Extracted content is split into indexed passages with document metadata and source URLs.
+5. The research engine retrieves relevant passages for a user's query.
+6. Gemini synthesizes an answer using the retrieved evidence.
+7. FINN displays findings, source references and evidence limitations.
+
+When Gemini is unavailable, the application can fall back to deterministic analysis rather than treating an unsuccessful model request as a successful AI response.
+
+## 5. AI Model Configuration
+
+FINN uses Google's Gemini API through its OpenAI-compatible Chat Completions interface.
+
+Environment configuration:
+
+```env
+GEMINI_API_KEY=your_gemini_api_key
+GEMINI_MODEL=gemini-3.6-flash
+GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
+FINN_OFFLINE_MODE=0
 ```
 
-Open <http://127.0.0.1:8000>. To expose it on your LAN for testing from a phone on the same network, run `uvicorn backend.app:app --host 0.0.0.0 --port 8000`; open the computer's LAN IP and port from the phone. Do not expose a development instance to the public internet.
+API credentials are supplied through environment variables and must never be committed to the repository.
 
-## Main application routes
+## 6. Data Sources and Limitations
 
-| Route | Purpose |
-|---|---|
-| `GET /api/health` | Health and document-coverage status |
-| `GET /api/companies` | Search the initial 18-company portfolio |
-| `GET /api/portfolio` | Portfolio registry |
-| `GET /api/feed?days=1` | Prioritized announcements for 1, 7 or 30 days |
-| `GET /api/company/{ticker}` | Company registry details, price snapshot, source shortcuts |
-| `GET /api/prices/{ticker}?period=3mo` | Daily price/volume history and source mode |
-| `GET /api/alerts/rules` | Read alert rules |
-| `PUT /api/alerts/rules` | Save price/volume thresholds and preferred categories |
-| `GET /api/alerts/preview` | Check example portfolio prices against the current alert rules |
-| `POST /api/research` | Retrieve primary-source excerpts for an ad-hoc question |
-| `GET /api/research/coverage` | Indexed documents and chunks by company |
-| `GET /api/research/history` | Recent research requests |
+- **Price data:** Best-effort public Yahoo Finance chart endpoint.
+- **Corporate announcements:** Best-effort public NSE announcement endpoint.
+- **Company fundamentals:** Company annual reports and other primary-source documents.
+- **Research synthesis:** Gemini using retrieved indexed evidence.
 
-Interactive API documentation is available at <http://127.0.0.1:8000/docs>.
+Important limitations:
 
-## Ingest a primary source for Pull research
+- Public price and exchange endpoints are not guaranteed APIs.
+- When upstream sources are unavailable, the application can display clearly labelled illustrative or DEMO records.
+- The application is designed around end-of-day data, not real-time intraday monitoring.
+- The indexed annual reports are extracted into passages; coverage and extraction accuracy require validation against the original documents.
+- Citation relevance and financial figures should be checked against their source documents before relying on them.
+- Free-tier hosting uses temporary local storage; saved application state may not persist across restarts or redeployments.
+- The prototype does not execute trades or provide investment advice.
 
-The initial document index at `data/documents/index.json` contains a single TCS performance-trend excerpt for demonstration. Use the ingestion script to add a publicly accessible annual report, quarterly results PDF, earnings-call transcript or investor presentation from a company or exchange source.
+## 7. Local Setup
+
+Requirements:
+- Python 3.10 or later.
+- Internet connection for external data sources, document ingestion and Gemini synthesis.
+
+Clone the repository:
+
+```bash
+git clone https://github.com/sssinghm/FINN-Investment-Agent.git
+cd FINN-Investment-Agent
+```
+
+Create and activate the virtual environment:
+
+```bash
+python -m venv .venv
+```
+
+Windows PowerShell:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+Install dependencies:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+Create the environment file:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Add your Gemini API configuration to `.env`.
+
+Start FINN:
+
+```bash
+uvicorn backend.app:app --reload
+```
+
+Open:
+
+- Application: http://127.0.0.1:8000
+- API documentation: http://127.0.0.1:8000/docs
+- Health endpoint: http://127.0.0.1:8000/api/health
+
+## 8. Document Ingestion
+
+FINN supports ingestion of publicly accessible primary-source documents.
+
+Example:
 
 ```bash
 python scripts/ingest_document.py \
-  --ticker TCS \
+  --ticker INFY \
   --type annual_report \
-  --period FY2025 \
-  --title "TCS Annual Report FY2025" \
-  --source-name "Company primary source" \
-  --url "https://example.com/annual-report.pdf"
+  --period FY2026 \
+  --url "PUBLIC_DOCUMENT_URL" \
+  --title "Infosys Annual Report FY2026" \
+  --source-name "Infosys Investor Relations"
 ```
 
-Replace the example URL with the actual document URL. Allowed types: `annual_report`, `quarterly_results`, `earnings_call`, `investor_presentation`, `exchange_filing`.
+Supported document types:
 
-The script extracts PDF text (using page metadata when available) or readable HTML text, splits it into chunks, then stores the metadata and chunks in `data/documents/index.json`. It does not OCR scanned PDFs. If the PDF has no extractable text, run OCR separately and ingest a text/HTML representation or improve the ingestion step. The preloaded TCS metrics are from the performance-trend table in the [official TCS Integrated Annual Report 2025–26](https://www.tcs.com/content/dam/tcs/investor-relations/financial-statements/2025-26/ar/annual-report-2025-2026.pdf); the app links back to the source and flags the table-footnote comparability caveat. Verify figures in the full report before relying on them.
+- annual_report
+- earnings_call
+- exchange_filing
+- investor_presentation
+- quarterly_results
 
-**Use only primary sources for Pull analysis.** The challenge explicitly rules out broker notes, news articles and research reports as the evidence base for company research. A company IR site, exchange filing, annual report and earnings-call transcript are appropriate starting points. Screener can be used to locate report/transcript links, but the indexed evidence should remain the company's own document.
+The ingestion process extracts readable PDF or HTML content, divides it into passages and stores document metadata and extracted content in `data/documents/index.json`.
 
-After ingestion, restart the app if it is already running (or re-run the research request); no database migration is needed.
+Scanned PDFs without extractable text are not automatically OCR-processed.
 
-## Optional Gemini synthesis
+## 9. Important API Endpoints
 
-FINN can use Google's Gemini API to synthesize the primary-source passages it has already retrieved. The app does not send a question to Gemini when the selected company has no indexed primary-source document; it returns a coverage gap instead.
+| Endpoint | Purpose |
+|---|---|
+| GET `/api/health` | Application health |
+| GET `/api/companies` | Company list |
+| GET `/api/portfolio` | Portfolio information |
+| GET `/api/feed?days=1` | Prioritized briefing |
+| GET `/api/prices/{ticker}` | Price and volume history |
+| GET `/api/alerts/rules` | Alert configuration |
+| PUT `/api/alerts/rules` | Update alert configuration |
+| GET `/api/alerts/preview` | Alert preview |
+| POST `/api/research` | On-demand financial research |
+| GET `/api/research/coverage` | Indexed document coverage |
+| GET `/api/research/history` | Research history |
 
-1. Create a Gemini API key in [Google AI Studio](https://aistudio.google.com/api-keys).
-2. Copy `.env.example` to `.env` and set the following values:
+## 10. Testing
 
-```env
-GEMINI_API_KEY=your_gemini_key_here
-GEMINI_MODEL=gemini-3.6-flash
-GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
-```
-
-3. Restart the local application. On Render, add the same three variables under **Environment** and redeploy.
-
-The integration uses Google's OpenAI-compatible Chat Completions endpoint. The model is instructed to answer only from retrieved passages, cite source markers and acknowledge insufficient evidence. This is a prototype guardrail, not a guarantee; verify the source text, period and citations for material claims. The API free tier has model- and project-specific rate limits, and Google states that free-tier content may be used to improve its products. Send only public information that you are comfortable sharing with Google; do not submit confidential, personal or material non-public information. Never commit `.env` or API keys. See Google's [OpenAI compatibility guide](https://ai.google.dev/gemini-api/docs/openai), [rate limits](https://aistudio.google.com/docs/rate-limits) and [pricing](https://aistudio.google.com/docs/pricing) for current terms.
-
-## Alert rules
-
-Default demo thresholds:
-
-- Absolute daily close move: ±3.0%
-- Volume: at least 2.0× the average of the previous 20 trading sessions
-- Announcement window: 24 hours
-
-Threshold rules use end-of-day data and must not be represented as intraday alerts. The comparison volume window excludes the current observation. The demo preview checks three portfolio symbols to keep the interaction quick; it is not a full automated monitoring daemon.
-
-## Test
+Run the automated test suite:
 
 ```bash
-pip install pytest
-pytest -q
+python -m pytest -q
 ```
 
-Current tests cover portfolio size, announcement classification, demo data labeling, safe behavior when research sources are missing, and threshold-trigger logic.
+Tests cover application functionality, research configuration and related application logic.
 
-## Suggested next steps for a submission-ready version
+## 11. Deployment
 
-1. Add a small, verified document pack for two or three companies and validate extractions by hand.
-2. Add actual quarterly-results table extraction with scope/unit/period validation before displaying QoQ/YoY figures.
-3. Persist upstream source records and refresh times; add retries/caching with source-friendly rate limits.
-4. Add a background scheduler only after the core feed and research paths are stable.
-5. Add a source-quality evaluation set (expected category, figures, period, citation) before widening coverage.
-6. Deploy the responsive frontend/backend and test the full flow on a phone.
+The application is deployed as a Render Web Service connected to the GitHub repository.
+
+The Gemini API key and other deployment-specific settings are configured through Render environment variables rather than stored in source code.
+
+## 12. Future Improvements
+
+- More extensive extraction and validation of quarterly financial statements.
+- Stronger citation-to-claim validation.
+- Wider coverage of company annual reports and earnings-call transcripts.
+- Scheduled data refresh with reliable source monitoring.
+- Persistent storage for user preferences and research history.
+- Evaluation datasets for financial extraction and research-answer quality.
 
 ## Disclaimer
 
-FINN is a prototype for research workflow evaluation, not investment advice. It does not execute trades, predict returns or recommend buying/selling securities. Sample records and synthetic prices are for interface testing only. Always verify information directly in exchange/company disclosures.
+FINN is a prototype developed for an investment-intelligence workflow challenge. It is not investment advice, does not execute trades and does not guarantee the completeness or accuracy of retrieved financial information. Users should verify material findings directly against official company and exchange disclosures.
